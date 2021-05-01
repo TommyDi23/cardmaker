@@ -18,7 +18,7 @@ const DetailsAdder = () => {
   };
 
   const handleSubmit = e => {
-    console.log("submitted");
+    console.log("submitteded");
     e.preventDefault();
   };
   // const ref = firebase.firestore().collection("users");
