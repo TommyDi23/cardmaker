@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import firebase from "./firebase";
 import "./App.css";
+import Header from "./Components/Header";
+import NavBar from "./Components/NavBar";
+import DetailsAdder from "./Components/DetailsAdder";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -13,25 +16,20 @@ function App() {
       querySnapshot.forEach(doc => {
         items.push({ ...doc.data(), id: doc.id });
       });
-      console.log(items);
-
       setUsers(items);
     });
   };
 
   useEffect(() => {
     getUsers();
-  }, []);
+  }, [users]);
 
   return (
-    <div className="App">
-      <h1>users</h1>
-      {users.map((user, i) => (
-        <div key={user.id}>
-          <h2>{user.name}</h2>
-        </div>
-      ))}
-    </div>
+    <>
+      <NavBar />
+      <Header />
+      <DetailsAdder />
+    </>
   );
 }
 
