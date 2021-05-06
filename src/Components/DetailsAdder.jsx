@@ -1,51 +1,75 @@
 import React, { useState } from "react";
-
-//import firebase from "../firebase";
+import { v4 as uuidv4 } from "uuid";
+//import Test from "./Test";
+import firebase from "../firebase";
+import { Redirect } from "react-router-dom";
 
 const DetailsAdder = () => {
+  const [toTest, setToTest] = useState(false);
+  // const [card, setCard] = useState([]);
   const [userDetails, setUserDetails] = useState({
+    id: uuidv4(),
     name: "",
     email: "",
     telephone: "",
-    title: ""
+    title: "",
+    company: ""
   });
+
+  if (toTest === true) {
+    return <Redirect to={`/${userDetails.id}`} />;
+  }
 
   const handleChange = e => {
     const { name, value } = e.target;
-    console.log(value);
     setUserDetails({ ...userDetails, [name]: value });
-    console.log(userDetails);
   };
 
   const handleSubmit = e => {
-    console.log("submitteded");
     e.preventDefault();
+    addDetails(userDetails);
+    setToTest(true);
   };
-  // const ref = firebase.firestore().collection("users");
+  const ref = firebase.firestore().collection("user");
 
-  // const formInputHandler = e => {
-  //   const { value } = e.target;
-  //   console.log(value);
-  //   setUserDetails({ name: value });
-  //   console.log(userDetails);
-  // };
-
-  // const addDetails = () => {
-  //   ref
-  //     .doc()
-  //     .set(userDetails)
-  //     .then(() => {
-  //       setUserDetails({
-  //         name: "",
-  //         email: "",
-  //         phone: "",
-  //         title: "blah"
-  //       });
+  // const getUsersByID = () => {
+  //   ref.onSnapshot(querySnapshot => {
+  //     const items = [];
+  //     querySnapshot.forEach(doc => {
+  //       items.push({ ...doc.data(), id: doc.id });
   //     });
+  //     setUsers(items);
+  //   });
   // };
+
+  // const getUser = () => {
+  //   ref.get().then(item => {
+  //     const items = item.docs.map(doc => {
+  //       return { ...doc.data(), id: doc.id };
+  //     });
+  //     console.log(items[0].id, "<--- this is what you get");
+  //     setUserDetails(items);
+  //   });
+  // };
+
+  const addDetails = () => {
+    ref
+      .doc(userDetails.id)
+      .set(userDetails)
+      .then(() => {
+        setUserDetails({
+          ...userDetails,
+          name: "",
+          email: "",
+          telephone: "",
+          title: "",
+          company: ""
+        });
+      });
+  };
 
   // useEffect(() => {
-  //   addDetails();
+  //  getUser();
   // }, []);
 
   return (
